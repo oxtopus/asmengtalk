@@ -5,6 +5,10 @@
 
 using Eigen::SparseMatrix;
 
+#include <emscripten/bind.h>
+
+using namespace emscripten;
+
 #ifdef RANDOM_SEED
   static int const _RANDOM_SEED = RANDOM_SEED;
 #else
@@ -29,6 +33,10 @@ using Eigen::SparseMatrix;
   static int const _N_MAX = 1024;
 #endif
 
+std::string helloEigen() {
+  return "Hello, Eigen.";
+}
+
 int main()
 {
   SparseMatrix<int> left(_M_MAX, _N_MAX), right(_M_MAX, _N_MAX);
@@ -45,6 +53,9 @@ int main()
     }
   }
 
-  std::cout << left * right << std::endl;
+  left * right;
 }
 
+EMSCRIPTEN_BINDINGS(my_module) {
+    function("helloEigen", &helloEigen);
+}
